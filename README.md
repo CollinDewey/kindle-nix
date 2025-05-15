@@ -8,18 +8,18 @@ Go to the releases page and run kindle-nix-installer.sh on your Kindle
 
 Build and transfer applications over via
 ```
-nix build nixpkgs#pkgsCross.armv7l-hf-multiplatform.fastfetch
-nix-copy-closure --to root@KINDLE_IP $(nix path-info nixpkgs#pkgsCross.armv7l-hf-multiplatform.fastfetch | head -1)
-ssh root@KINDLE_IP "nix-env -i $(nix path-info nixpkgs#pkgsCross.armv7l-hf-multiplatform.fastfetch | head -1)"
+nix build nixpkgs#pkgsCross.armv7l-hf-multiplatform.htop
+nix-copy-closure --to root@KINDLE_IP $(nix path-info nixpkgs#pkgsCross.armv7l-hf-multiplatform.htop)
+ssh root@KINDLE_IP "nix-env -i $(nix path-info nixpkgs#pkgsCross.armv7l-hf-multiplatform.htop)"
 ```
 
 If you just want it to be easy, you can set a shell alias to run this all for you.
 ```
-alias kindle-send='f(){ p=nixpkgs#pkgsCross.armv7l-hf-multiplatform.$2 && nix build $p && c=$(nix path-info $p | head -1) && nix-copy-closure --to $1 $c && ssh $1 "nix-env -i $c"; }; f'
+alias kindle-send='f(){ p=nixpkgs#pkgsCross.armv7l-hf-multiplatform.$2 && nix build $p && for c in $(nix path-info $p); do nix-copy-closure --to $1 $c && ssh $1 "nix-env -i $c"; done; }; f'
 ```
 Which you execute like
 ```
-kindle-send root@IP fastfetch
+kindle-send root@IP htop
 ```
 
 You can build applications on the kindle itself, but it'll likely run out of memory. Nix is hungry. Yummy RAM.
