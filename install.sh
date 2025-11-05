@@ -24,8 +24,8 @@ install -dv -m 1775 /nix/store
 
 # Download and extract Nix
 # Didn't see a great way to get the latest tag
-TAGS=$(curl -s "https://api.github.com/repos/nixos/nix/tags" | awk -F'"' '/name/{print $4}')
-TAG=$(echo "$TAGS" | head -n 1)
+TAGS=$(curl -s "https://api.github.com/repos/nixos/nix/tags")
+TAG=$(echo "$TAGS" | awk -F'"' '/name/{print $4}' | head -n 1)
 URL=https://releases.nixos.org/nix/nix-$TAG/nix-$TAG-armv7l-linux.tar.xz
 curl -L "$URL" | tar -xJ -C '/nix/store' --strip-components=2
 
